@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- WHY: .NET Framework 4.8(기존 사내 프로젝트)과 .NET 8(신규 프로젝트) 양쪽에서 같은 DLL 세트를 쓰기 위해 멀티 타깃. -->
+    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <OutputType>Library</OutputType>
+    <RootNamespace>shComponent</RootNamespace>
+    <AssemblyName>shComponent</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591;CS1573</NoWarn>
+    <Description>Windows 11 설정 앱 스타일의 재사용 WPF UI 프레임(메뉴/서브메뉴/콘텐츠 패널/기본 컨트롤/스켈레톤).</Description>
+    <!-- WHY: 버전을 csproj에 적지 않고 Git 태그(v1.2.3)에서 MinVer가 계산한다. 태그 사이 커밋은 1.2.4-alpha.0.N 처럼 자동 증가. -->
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+    <MinVerMinimumMajorMinor>1.0</MinVerMinimumMajorMinor>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- WHY: PrivateAssets=all → 빌드 시에만 쓰는 도구라 이 라이브러리를 참조하는 쪽으로 의존성이 전파되지 않는다. -->
+    <PackageReference Include="MinVer" Version="8.0.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- WHY: internal 형식(NavButtonHost 등)도 테스트할 수 있게 테스트 어셈블리에만 공개한다. -->
+    <InternalsVisibleTo Include="shComponent.Tests" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- WHY: 라이브러리가 net48 / net8 두 벌로 나가므로 테스트도 두 런타임에서 모두 돌려야 한쪽에서만 깨지는 문제를 잡는다. -->
+    <TargetFrameworks>net48;net8.0-windows</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <!-- WHY: xUnit v3 테스트 프로젝트는 스스로 실행되는 exe(Microsoft Testing Platform)다. -->
+    <OutputType>Exe</OutputType>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" Version="4.0.1" />
+    <!-- WHY: WPF 컨트롤은 STA 스레드에서만 만들 수 있다. [WpfFact] 가 테스트를 STA + Dispatcher 위에서 실행한다. -->
+    <PackageReference Include="Xunit.StaFact" Version="4.0.23" />
+    <!-- WHY: dotnet test 의 coverage 옵션으로 커버리지(cobertura)를 수집한다. MTP 전용이라 coverlet 대신 사용. -->
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.11.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\shComponent\shComponent.csproj" />
+  </ItemGroup>
+
+</Project>

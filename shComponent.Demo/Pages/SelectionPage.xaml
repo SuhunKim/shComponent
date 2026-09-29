@@ -1,0 +1,35 @@
+<UserControl x:Class="shComponent.Demo.Pages.SelectionPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sh="urn:shComponent">
+    <StackPanel Margin="0,0,0,24">
+        <sh:CustomGroupBox Header="CustomCheckBox">
+            <StackPanel>
+                <sh:CustomCheckBox Content="Option1" IsChecked="True"/>
+                <sh:CustomCheckBox Content="Option2"/>
+                <sh:CustomCheckBox Content="Option3 (IsThreeState)" IsThreeState="True" IsChecked="{x:Null}"/>
+                <sh:CustomCheckBox Content="Option4 (비활성)" IsEnabled="False" IsChecked="True"/>
+            </StackPanel>
+        </sh:CustomGroupBox>
+
+        <sh:CustomGroupBox Header="CustomRadioButton" Margin="0,20,0,0">
+            <StackPanel>
+                <sh:CustomRadioButton GroupName="group1" Content="Choice1" IsChecked="True"/>
+                <sh:CustomRadioButton GroupName="group1" Content="Choice2"/>
+                <sh:CustomRadioButton GroupName="group1" Content="Choice3"/>
+            </StackPanel>
+        </sh:CustomGroupBox>
+
+        <sh:CustomGroupBox Header="CustomComboBox" Margin="0,20,0,0">
+            <StackPanel Orientation="Horizontal">
+                <sh:CustomComboBox x:Name="FixedCombo" Width="200" SelectedIndex="1">
+                    <ComboBoxItem Content="Item1"/>
+                    <ComboBoxItem Content="Item2"/>
+                    <ComboBoxItem Content="Item3"/>
+                </sh:CustomComboBox>
+                <sh:CustomComboBox x:Name="CodeCombo" Width="200" Margin="12,0,0,0" PlaceholderText="PlaceholderText"/>
+                <TextBlock x:Name="SelectionText" Margin="16,0,0,0" VerticalAlignment="Center" Foreground="#616161"/>
+            </StackPanel>
+        </sh:CustomGroupBox>
+    </StackPanel>
+</UserControl>

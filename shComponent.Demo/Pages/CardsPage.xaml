@@ -1,0 +1,47 @@
+<UserControl x:Class="shComponent.Demo.Pages.CardsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sh="urn:shComponent">
+    <StackPanel Margin="0,0,0,24">
+        <TextBlock Text="설정 카드 (Glyph / Header / Description + 오른쪽 Content)" FontWeight="SemiBold" Margin="2,0,0,8"/>
+        <sh:CustomCard Glyph="&#xE7C3;" Header="Card1" Description="Description (오른쪽: Slider)" Margin="0,0,0,4">
+            <Slider Width="180" Minimum="0" Maximum="100" Value="70" VerticalAlignment="Center"/>
+        </sh:CustomCard>
+        <sh:CustomCard Glyph="&#xE7C3;" Header="Card2" Description="Description (오른쪽: CheckBox)" Margin="0,0,0,4">
+            <sh:CustomCheckBox Content="Option" IsChecked="True"/>
+        </sh:CustomCard>
+        <sh:CustomCard Glyph="&#xE7C3;" Header="Card3" Description="IsClickable=True → Click 이벤트"
+                       IsClickable="True" Click="OnCardClick" Margin="0,0,0,4"/>
+        <sh:CustomCard Glyph="&#xE7C3;" Header="Card4" Margin="0,0,0,4">
+            <sh:CustomComboBox Width="180" SelectedIndex="0">
+                <ComboBoxItem Content="Item1"/>
+                <ComboBoxItem Content="Item2"/>
+            </sh:CustomComboBox>
+        </sh:CustomCard>
+
+        <TextBlock Text="일반 카드 컨테이너 (Header/Description/Glyph 비움)" FontWeight="SemiBold" Margin="2,20,0,8"/>
+        <UniformGrid Columns="3">
+            <sh:CustomCard Margin="0,0,8,0" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Value1" Foreground="#616161"/>
+                    <TextBlock Text="128" FontSize="28" FontWeight="SemiBold"/>
+                </StackPanel>
+            </sh:CustomCard>
+            <sh:CustomCard Margin="4,0,4,0" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="Value2" Foreground="#616161"/>
+                    <TextBlock Text="12" FontSize="28" FontWeight="SemiBold"/>
+                </StackPanel>
+            </sh:CustomCard>
+            <sh:CustomCard Margin="8,0,0,0" Padding="16" Background="#EAF3FC" BorderBrush="#CFE2F6">
+                <StackPanel>
+                    <TextBlock Text="Value3 (배경색 변경 예)" Foreground="#004A8F"/>
+                    <TextBlock Text="99.2%" FontSize="28" FontWeight="SemiBold" Foreground="#004A8F"/>
+                </StackPanel>
+            </sh:CustomCard>
+        </UniformGrid>
+
+        <TextBlock Text="CustomSkeleton" FontWeight="SemiBold" Margin="2,20,0,8"/>
+        <sh:CustomSkeleton RowCount="2" ShowHeader="False"/>
+    </StackPanel>
+</UserControl>

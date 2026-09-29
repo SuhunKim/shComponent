@@ -1,0 +1,84 @@
+# CI: PR과 main push마다 "restore → format 검사 → Release 빌드 → 테스트 → 커버리지 → 산출물 업로드"
+#
+# WHY: 빌드 단계는 모두 build.ps1 안에 있다. 이 파일은 "환경 준비 + build.ps1 호출 + 결과 업로드"만 한다.
+#      → 로컬에서 .\build.ps1 을 돌리면 CI와 같은 결과가 나온다.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  # WHY: 코드 변경 없이 러너/캐시 문제를 확인할 때 Actions 탭에서 수동 실행.
+  workflow_dispatch:
+
+# WHY: 같은 PR에 커밋을 연달아 올리면 이전 실행은 의미가 없다. 취소해서 대기 시간과 러너 사용량을 줄인다.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# WHY: 최소 권한. CI는 코드를 읽기만 한다(토큰이 유출돼도 쓰기 불가).
+permissions:
+  contents: read
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    # WHY: 이 잡 이름(build)이 브랜치 보호 규칙의 "필수 상태 검사"로 등록된다. 바꾸면 보호 규칙도 같이 바꿔야 한다.
+    name: build
+    # WHY: WPF와 net48은 Windows에서만 빌드된다. 호스티드 러너에는 VS Build Tools와 .NET Framework 4.8 targeting pack이 설치돼 있다.
+    runs-on: windows-latest
+    # WHY: 목표는 10분 이내. 멈춘 테스트(예: STA 데드락)가 러너를 6시간 붙잡지 않도록 상한을 둔다.
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          # WHY: MinVer는 Git 태그와 커밋 이력으로 버전을 계산한다. 기본값(1 = 얕은 복제)이면 태그를 못 찾아 0.0.0 이 된다.
+          fetch-depth: 0
+
+      - name: Setup .NET (global.json)
+        uses: actions/setup-dotnet@v6
+        with:
+          # WHY: SDK 버전을 YAML에 따로 적지 않고 global.json 한 곳에서 관리 → 로컬과 CI가 항상 같은 SDK.
+          global-json-file: global.json
+
+      - name: NuGet 캐시
+        uses: actions/cache@v6
+        with:
+          path: ~/.nuget/packages
+          # WHY: 패키지 목록이 바뀌는 파일의 해시가 키. 안 바뀌면 복원만 하고 다운로드를 건너뛴다(보통 30초 이상 절약).
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'global.json', '.config/dotnet-tools.json') }}
+          # WHY: 키가 바뀌어도(패키지 1개 추가 등) 가장 최근 캐시를 복원해 대부분 재사용한다.
+          restore-keys: nuget-${{ runner.os }}-
+
+      - name: Build / Test (build.ps1)
+        # WHY: pwsh(PowerShell 7)는 기본 UTF-8 이라 한글 로그가 깨지지 않는다.
+        shell: pwsh
+        run: ./build.ps1
+
+      # WHY: 테스트가 실패해도(always) 결과 파일은 올려야 원인을 볼 수 있다.
+      - name: Upload test results & coverage
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results
+          path: |
+            artifacts/test-results
+            artifacts/coverage
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v7
+        with:
+          name: shComponent-${{ github.sha }}
+          path: |
+            artifacts/lib
+            artifacts/demo
+          retention-days: 14

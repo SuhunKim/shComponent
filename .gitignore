@@ -1,0 +1,11 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# WHY: build.ps1 / CI 산출물(테스트 결과, 커버리지, 패키지)은 매 빌드마다 새로 만들어지므로 저장소에 넣지 않는다.
+artifacts/
+TestResults/
+*.nupkg
+*.snupkg

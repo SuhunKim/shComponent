@@ -1,0 +1,10 @@
+<UserControl x:Class="shComponent.Demo.Pages.HomePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sh="urn:shComponent">
+    <StackPanel Margin="0,0,0,24">
+        <TextBlock x:Name="WelcomeText" Margin="2,0,0,12" Foreground="#616161"/>
+        <!-- 로딩된 데이터로 코드비하인드가 카드를 채운다 -->
+        <StackPanel x:Name="CardsHost"/>
+    </StackPanel>
+</UserControl>

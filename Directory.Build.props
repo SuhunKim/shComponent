@@ -1,0 +1,24 @@
+<Project>
+
+  <!-- WHY: 솔루션 폴더의 모든 csproj가 자동으로 이 파일을 가져온다.
+       빌드 규칙을 한 곳에 모아 두면 로컬(VS/build.ps1)과 CI가 같은 설정으로 빌드된다. -->
+
+  <PropertyGroup>
+    <!-- WHY: GitHub Actions는 GITHUB_ACTIONS=true 를 넣어 준다. CI 빌드에서만 로컬 경로(D:\...)를
+         PDB/DLL에서 지워 누가 어디서 빌드해도 같은 바이너리가 나오게 한다(결정적 빌드).
+         로컬에서 켜면 디버거가 소스 파일을 못 찾으므로 CI에서만 켠다. -->
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <Deterministic>true</Deterministic>
+
+    <!-- WHY: SourceLink(.NET 8+ SDK 기본 포함). 패키지 사용자가 디버깅할 때 GitHub의 정확한 커밋 소스로 들어갈 수 있다. -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <!-- WHY: 경고는 쌓이면 아무도 안 본다. 현재 경고 0개이므로 Release(=CI, build.ps1)에서 오류로 막아 0개를 유지한다.
+         Debug에서는 작업 중 흐름을 끊지 않도록 경고로 둔다. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+</Project>

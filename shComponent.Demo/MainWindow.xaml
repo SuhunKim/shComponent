@@ -1,0 +1,9 @@
+<Window x:Class="shComponent.Demo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sh="urn:shComponent"
+        Title="shComponent Demo" Width="1180" Height="760"
+        WindowStartupLocation="CenterScreen">
+    <!-- 프레임은 이 한 줄. 나머지(메뉴/페이지 등록)는 코드비하인드에서 명시적으로 한다. -->
+    <sh:CustomMain x:Name="Shell" AppTitle="shComponent 데모" AppGlyph="&#xE80F;"/>
+</Window>

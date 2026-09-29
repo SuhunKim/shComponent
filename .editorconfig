@@ -1,0 +1,33 @@
+# WHY: IDE(VS)와 CI의 `dotnet format --verify-no-changes`가 같은 규칙을 보도록 스타일을 파일로 고정한다.
+#      값은 기존 코드에 맞춰 적었다(규칙을 새로 강제하지 않음).
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{csproj,props,targets,json,yml,yaml}]
+indent_size = 2
+
+[*.sln]
+end_of_line = crlf
+charset = utf-8-bom
+indent_style = tab
+
+[*.ps1]
+# WHY: Windows PowerShell 5.1 은 BOM 없는 UTF-8 을 ANSI(CP949)로 읽어 한글이 깨지고 구문 오류가 난다.
+charset = utf-8-bom
+
+[*.md]
+# WHY: 마크다운은 줄 끝 공백 2칸이 줄바꿈 의미를 가진다.
+trim_trailing_whitespace = false
+
+[*.cs]
+# 기존 코드 스타일: file-scoped namespace 미사용, var 사용, using 은 System 먼저
+csharp_style_namespace_declarations = block_scoped:suggestion
+dotnet_sort_system_directives_first = true
+csharp_new_line_before_open_brace = all
