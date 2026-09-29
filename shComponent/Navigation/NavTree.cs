@@ -36,3 +36,4 @@ namespace shComponent.Navigation
             => string.Equals(item.Key, key, StringComparison.OrdinalIgnoreCase);
     }
 }
+   
