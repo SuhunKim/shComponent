@@ -9,3 +9,6 @@ artifacts/
 TestResults/
 *.nupkg
 *.snupkg
+
+# WHY: 이슈별 워크트리(ISSUE_BRANCH_RULES.md 4장)는 저장소 루트 아래에 만들어지므로 untracked 로 보이지 않게 한다.
+*-issue*/
